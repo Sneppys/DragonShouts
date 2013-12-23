@@ -1,6 +1,7 @@
 package net.mcshockwave.DragonShouts.Utils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -28,6 +29,11 @@ public class ItemMetaUtils {
 		m.setLore(s);
 		it.setItemMeta(m);
 		return it;
+	}
+	
+	public static List<String> getLore(ItemStack it) {
+		ItemMeta m = it.getItemMeta();
+		return m.getLore();
 	}
 	
 	public static boolean hasCustomName(ItemStack it) {

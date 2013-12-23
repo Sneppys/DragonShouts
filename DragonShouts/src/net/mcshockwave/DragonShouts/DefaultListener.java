@@ -1,6 +1,7 @@
 package net.mcshockwave.DragonShouts;
 
 import java.util.HashMap;
+import java.util.List;
 
 import net.mcshockwave.DragonShouts.Utils.ItemMetaUtils;
 
@@ -57,6 +58,18 @@ public class DefaultListener implements Listener {
 			}
 			p.openInventory(i);
 			select.put(p, b);
+		}
+
+		if (a.name().contains("RIGHT_CLICK") && it.hasItemMeta()) {
+			String pre = "§aBound>";
+			List<String> lo = ItemMetaUtils.getLore(it);
+
+			for (String s : lo) {
+				if (s.startsWith(pre)) {
+					Bukkit.dispatchCommand(p, "shout" + s.replace(pre, ""));
+					return;
+				}
+			}
 		}
 	}
 

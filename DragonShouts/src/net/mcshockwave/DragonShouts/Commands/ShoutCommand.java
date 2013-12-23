@@ -1,7 +1,10 @@
 package net.mcshockwave.DragonShouts.Commands;
 
+import java.util.List;
+
 import net.mcshockwave.DragonShouts.DragonShouts;
 import net.mcshockwave.DragonShouts.Shout;
+import net.mcshockwave.DragonShouts.Utils.ItemMetaUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class ShoutCommand implements CommandExecutor {
 
@@ -53,6 +57,33 @@ public class ShoutCommand implements CommandExecutor {
 						} catch (Exception e) {
 							p.sendMessage(DragonShouts.prefix + "Invalid args");
 						}
+					}
+				}
+				if (args[0].equalsIgnoreCase("bind")) {
+					if (args.length > 1) {
+						String toBind = "";
+						for (int i = 1; i < 4; i++) {
+							if (args.length > i) {
+								toBind += " " + args[i];
+							}
+						}
+						ItemStack it = p.getItemInHand();
+						if (it == null)
+							return false;
+						List<String> lore = ItemMetaUtils.getLore(it);
+						String found = null;
+						
+						String pre = "§aBound>";
+						for (String s : lore) {
+							if (s.startsWith(pre)) {
+								found = s;
+								break;
+							}
+						}
+						
+						if (found == null) return false;
+						lore.remove(pre + found);
+						lore.add(pre + toBind);
 					}
 				}
 				if (args.length == 1) {
