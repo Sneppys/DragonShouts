@@ -1,5 +1,6 @@
 package net.mcshockwave.DragonShouts.Commands;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.mcshockwave.DragonShouts.DragonShouts;
@@ -71,19 +72,20 @@ public class ShoutCommand implements CommandExecutor {
 						if (it == null)
 							return false;
 						List<String> lore = ItemMetaUtils.getLore(it);
-						String found = null;
+						if (lore == null) {
+							lore = new ArrayList<>();
+						}
 						
 						String pre = "§aBound>";
 						for (String s : lore) {
 							if (s.startsWith(pre)) {
-								found = s;
+								lore.remove(s);
 								break;
 							}
 						}
 						
-						if (found == null) return false;
-						lore.remove(pre + found);
 						lore.add(pre + toBind);
+						ItemMetaUtils.setLore(it, lore.toArray(new String[0]));
 					}
 				}
 				if (args.length == 1) {

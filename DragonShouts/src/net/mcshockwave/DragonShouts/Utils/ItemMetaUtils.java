@@ -3,7 +3,6 @@ package net.mcshockwave.DragonShouts.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +23,7 @@ public class ItemMetaUtils {
 		ItemMeta m = it.getItemMeta();
 		ArrayList<String> s = new ArrayList<String>();
 		for (String l : lore) {
-			s.add(ChatColor.GRAY + l);
+			s.add(l);
 		}
 		m.setLore(s);
 		it.setItemMeta(m);
