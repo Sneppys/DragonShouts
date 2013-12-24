@@ -247,8 +247,8 @@ public enum Shout {
 
 				for (Entity e : near) {
 					if (e.getLocation().distance(b.getLocation()) < 4) {
-						e.setVelocity(LocUtils.getVelocity(p.getLocation(), e.getLocation()).multiply(num / 3 + 1)
-								.add(new Vector(0, 0.4, 0)));
+						e.setVelocity(LocUtils.getVelocity(p.getLocation(), e.getLocation()).multiply(num / 2 + 1)
+								.add(new Vector(0, 0.1, 0)));
 					}
 				}
 			}
@@ -418,8 +418,8 @@ public enum Shout {
 					}
 					Player p2 = (Player) e;
 					if (e.getLocation().distance(b.getLocation()) < 7) {
-						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, num * 60, -num * 2));
-						p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 60, num - 1));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, num * 120, -num * 2));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num - 1));
 					}
 				}
 			}
