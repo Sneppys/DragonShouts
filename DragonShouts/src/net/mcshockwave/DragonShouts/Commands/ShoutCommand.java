@@ -37,7 +37,7 @@ public class ShoutCommand implements CommandExecutor {
 						Player p2 = Bukkit.getPlayer(args[1]);
 						if (p2 != null) {
 							for (Shout s : Shout.values()) {
-								for (int i = 0; i < (3 - (s.getLearnLevel(p2) - 1)); i++) {
+								for (int i = 0; i < (3 - (s.getLearnLevel(p2) + 1)); i++) {
 									s.setLearned(p2);
 								}
 							}

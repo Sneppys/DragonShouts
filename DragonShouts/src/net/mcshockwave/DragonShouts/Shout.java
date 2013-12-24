@@ -102,6 +102,27 @@ public enum Shout {
 		30,
 		60,
 		90),
+	Battle_Fury(
+		"Mid",
+		"Vur",
+		"Shaan",
+		20,
+		30,
+		40),
+	Elemental_Fury(
+		"Su",
+		"Grah",
+		"Dun",
+		30,
+		40,
+		50),
+	Soul_Tear(
+		"Rii",
+		"Vaaz",
+		"Zol",
+		5,
+		5,
+		90),
 	Dragonrend(
 		"Joor",
 		"Zah",
@@ -389,6 +410,44 @@ public enum Shout {
 						p2.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, num * 20, num * 4));
 						if (num > 1) {
 							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num * 3));
+						}
+					}
+				}
+			}
+		}
+
+		if (this == Battle_Fury) {
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
+			for (Player p2 : Bukkit.getOnlinePlayers()) {
+				if (p2 != p && p2.getLocation().distance(p.getLocation()) < num * 8) {
+					p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, num * 100, num - 1));
+					p2.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, num * 100, num - 1));
+				}
+			}
+		}
+
+		if (this == Elemental_Fury) {
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
+			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, num * 100, num - 1));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, num * 100, num - 1));
+		}
+
+		if (this == Soul_Tear) {
+			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
+			List<Entity> near = p.getNearbyEntities(15, 15, 15);
+			p.getWorld().playSound(p.getLocation(), Sound.IRONGOLEM_HIT, 2, 0);
+			if (num > 2) {
+				for (Block b : bs) {
+					PacketUtils.playParticleEffect(ParticleEffect.MOB_SPELL, b.getLocation().add(0.5, 0.5, 0.5), 1,
+							0.3f, num * 15);
+
+					for (Entity e : near) {
+						if (!(e instanceof Player)) {
+							continue;
+						}
+						Player p2 = (Player) e;
+						if (e.getLocation().distance(b.getLocation()) < 7) {
+							p2.damage(10);
 						}
 					}
 				}
