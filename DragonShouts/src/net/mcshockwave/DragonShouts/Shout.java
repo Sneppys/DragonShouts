@@ -219,7 +219,8 @@ public enum Shout {
 
 		if (DragonShouts.broadcast_enabled) {
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p.getLocation().distance(p2.getLocation()) < DragonShouts.broadcast_range
+				if (p.getWorld() == p2.getWorld()
+						&& p.getLocation().distance(p2.getLocation()) < DragonShouts.broadcast_range
 						|| DragonShouts.broadcast_range <= 0) {
 					String send = ChatColor.translateAlternateColorCodes(
 							'&',
@@ -503,7 +504,7 @@ public enum Shout {
 						if (e instanceof LivingEntity) {
 							((LivingEntity) e).damage(num * 3);
 						}
-						e.setVelocity(e.getVelocity().add(new Vector(0, 1, 0)));
+						e.setVelocity(e.getVelocity().add(new Vector(0, 0.3, 0)));
 					}
 				}
 			}
@@ -537,10 +538,11 @@ public enum Shout {
 		}
 
 		if (this == Throw_Voice) {
+			Sound s = Sound.values()[rand.nextInt(Sound.values().length)];
+			int pit = rand.nextInt(3);
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
 				if (p2.getLocation().distance(p.getLocation()) < num * 30) {
-					p2.playSound(LocUtils.addRand(p2.getLocation().clone(), 10, 10, 10),
-							Sound.values()[rand.nextInt(Sound.values().length)], 5, rand.nextInt(3));
+					p2.playSound(LocUtils.addRand(p2.getLocation().clone(), 10, 10, 10), s, 5, pit);
 				}
 			}
 		}
