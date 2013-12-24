@@ -386,7 +386,7 @@ public enum Shout {
 					}
 					Player p2 = (Player) e;
 					if (e.getLocation().distance(b.getLocation()) < 7) {
-						p2.setFoodLevel(p2.getFoodLevel() - num * 3);
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, num * 20, num * 4));
 						if (num > 1) {
 							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num * 3));
 						}
