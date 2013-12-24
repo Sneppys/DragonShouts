@@ -147,6 +147,13 @@ public enum Shout {
 		30,
 		35,
 		50),
+	Throw_Voice(
+		"Zul",
+		"Mey",
+		"Gut",
+		30,
+		15,
+		5),
 	Dragonrend(
 		"Joor",
 		"Zah",
@@ -525,6 +532,15 @@ public enum Shout {
 							p2.setItemInHand(null);
 						}
 					}
+				}
+			}
+		}
+
+		if (this == Throw_Voice) {
+			for (Player p2 : Bukkit.getOnlinePlayers()) {
+				if (p2.getLocation().distance(p.getLocation()) < num * 30) {
+					p2.playSound(LocUtils.addRand(p2.getLocation().clone(), 10, 10, 10),
+							Sound.values()[rand.nextInt(Sound.values().length)], 5, rand.nextInt(3));
 				}
 			}
 		}
