@@ -345,7 +345,7 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_HIT, 1, 0);
 			p.sendMessage("§a[Aura Whisper] §7All nearby players:");
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2 != p && p2.getLocation().distance(p.getLocation()) < 100) {
+				if (p2 != p && p2.getLocation().distance(p.getLocation()) < num * 50) {
 					p.sendMessage(getAuraString(p2, p));
 				}
 			}
