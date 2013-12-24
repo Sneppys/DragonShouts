@@ -82,7 +82,7 @@ public enum Shout {
 		600,
 		600),
 	Aura_Whisper(
-		"Lass",
+		"Laas",
 		"Yah",
 		"Nir",
 		30,
