@@ -37,7 +37,7 @@ public class ShoutCommand implements CommandExecutor {
 						Player p2 = Bukkit.getPlayer(args[1]);
 						if (p2 != null) {
 							for (Shout s : Shout.values()) {
-								for (int i = 0; i <= 3 - s.getLearnLevel(p2); i++) {
+								for (int i = 0; i < (3 - (s.getLearnLevel(p2) - 1)); i++) {
 									s.setLearned(p2);
 								}
 							}
@@ -75,7 +75,7 @@ public class ShoutCommand implements CommandExecutor {
 						if (lore == null) {
 							lore = new ArrayList<>();
 						}
-						
+
 						String pre = "§aBound>";
 						for (String s : lore) {
 							if (s.startsWith(pre)) {
@@ -83,7 +83,7 @@ public class ShoutCommand implements CommandExecutor {
 								break;
 							}
 						}
-						
+
 						lore.add(pre + toBind);
 						ItemMetaUtils.setLore(it, lore.toArray(new String[0]));
 					}
