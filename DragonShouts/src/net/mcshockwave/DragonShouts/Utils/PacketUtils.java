@@ -109,8 +109,8 @@ public class PacketUtils {
 
 	public static PacketPlayOutWorldParticles generateParticles(ParticleEffect particle, Location l, float rad,
 			float speed, int amount) {
-		PacketPlayOutWorldParticles pack = new PacketPlayOutWorldParticles(particle.particleName, (float) l.getX(), (float) l.getY(),
-				(float) l.getZ(), rad, rad, rad, speed, amount);
+		PacketPlayOutWorldParticles pack = new PacketPlayOutWorldParticles(particle.particleName, (float) l.getX(),
+				(float) l.getY(), (float) l.getZ(), rad, rad, rad, speed, amount);
 		return pack;
 	}
 
@@ -127,7 +127,7 @@ public class PacketUtils {
 
 	public static void sendPacketGlobally(Location l, int distance, Packet pack) {
 		for (Player p : Bukkit.getOnlinePlayers()) {
-			if (p.getLocation().distance(l) <= distance) {
+			if (p.getWorld() == l.getWorld() && p.getLocation().distance(l) <= distance) {
 				sendPacket(p, pack);
 			}
 		}

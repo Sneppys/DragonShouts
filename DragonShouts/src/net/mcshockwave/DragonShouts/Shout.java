@@ -363,7 +363,7 @@ public enum Shout {
 						m.getWorld().strikeLightningEffect(m);
 
 						for (Player p2 : Bukkit.getOnlinePlayers()) {
-							if (p2 != p && p2.getLocation().distance(m) < 10) {
+							if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(m) < 10) {
 								p2.setFireTicks(num * 100);
 							}
 						}
@@ -398,7 +398,7 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_HIT, 1, 0);
 			p.sendMessage("§a[Aura Whisper] §7All nearby players:");
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2 != p && p2.getLocation().distance(p.getLocation()) < num * 50) {
+				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 50) {
 					p.sendMessage(getAuraString(p2, p));
 				}
 			}
@@ -451,7 +451,7 @@ public enum Shout {
 		if (this == Battle_Fury) {
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2 != p && p2.getLocation().distance(p.getLocation()) < num * 8) {
+				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 8) {
 					p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, num * 100, num - 1));
 					p2.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, num * 100, num - 1));
 				}
@@ -541,7 +541,7 @@ public enum Shout {
 			Sound s = Sound.values()[rand.nextInt(Sound.values().length)];
 			int pit = rand.nextInt(3);
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2.getLocation().distance(p.getLocation()) < num * 30) {
+				if (p2.getWorld() == p.getWorld() && p2.getLocation().distance(p.getLocation()) < num * 30) {
 					p2.playSound(LocUtils.addRand(p2.getLocation().clone(), 10, 10, 10), s, 5, pit);
 				}
 			}
