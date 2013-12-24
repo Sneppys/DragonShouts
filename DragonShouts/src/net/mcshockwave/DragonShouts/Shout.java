@@ -238,7 +238,7 @@ public enum Shout {
 		}
 
 		if (this == Unrelenting_Force) {
-			Block[] bs = p.getLineOfSight(null, num * 2).toArray(new Block[0]);
+			Block[] bs = p.getLineOfSight(null, (num * 4) + 2).toArray(new Block[0]);
 			List<Entity> near = p.getNearbyEntities(15, 15, 15);
 			p.getWorld().playSound(p.getLocation(), Sound.EXPLODE, 1, 1);
 			for (Block b : bs) {
@@ -492,7 +492,7 @@ public enum Shout {
 		}
 
 		if (this == Cyclone) {
-			Block[] bs = p.getLineOfSight(null, num * 2).toArray(new Block[0]);
+			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
 			List<Entity> near = p.getNearbyEntities(15, 15, 15);
 			p.getWorld().playSound(p.getLocation(), Sound.FIREWORK_LARGE_BLAST2, 3, 0);
 			for (Block b : bs) {
