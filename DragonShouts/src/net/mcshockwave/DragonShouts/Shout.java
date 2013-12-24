@@ -81,6 +81,27 @@ public enum Shout {
 		600,
 		600,
 		600),
+	Aura_Whisper(
+		"Lass",
+		"Yah",
+		"Nir",
+		30,
+		40,
+		50),
+	Marked_For_Death(
+		"Krii",
+		"Lun",
+		"Aus",
+		20,
+		30,
+		40),
+	Drain_Vitality(
+		"Gaan",
+		"Lah",
+		"Haas",
+		30,
+		60,
+		90),
 	Dragonrend(
 		"Joor",
 		"Zah",
@@ -319,6 +340,68 @@ public enum Shout {
 				}
 			}
 		}
+
+		if (this == Aura_Whisper) {
+			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_HIT, 1, 0);
+			p.sendMessage("§a[Aura Whisper] §7All nearby players:");
+			for (Player p2 : Bukkit.getOnlinePlayers()) {
+				if (p2 != p && p2.getLocation().distance(p.getLocation()) < 100) {
+					p.sendMessage(getAuraString(p2, p));
+				}
+			}
+		}
+
+		if (this == Marked_For_Death) {
+			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
+			List<Entity> near = p.getNearbyEntities(15, 15, 15);
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_HURT, 2f, 0);
+			for (Block b : bs) {
+				PacketUtils.playParticleEffect(ParticleEffect.LARGE_SMOKE, b.getLocation().add(0.5, 0.5, 0.5), 1, 0.3f,
+						num * 15);
+
+				for (Entity e : near) {
+					if (!(e instanceof Player)) {
+						continue;
+					}
+					Player p2 = (Player) e;
+					if (e.getLocation().distance(b.getLocation()) < 7) {
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, num * 60, -num * 2));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 60, num - 1));
+					}
+				}
+			}
+		}
+
+		if (this == Drain_Vitality) {
+			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
+			List<Entity> near = p.getNearbyEntities(15, 15, 15);
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_IDLE, 0.5f, 0.7f);
+			for (Block b : bs) {
+				PacketUtils.playParticleEffect(ParticleEffect.PORTAL, b.getLocation().add(0.5, 0.5, 0.5), 1, 0.3f,
+						num * 15);
+
+				for (Entity e : near) {
+					if (!(e instanceof Player)) {
+						continue;
+					}
+					Player p2 = (Player) e;
+					if (e.getLocation().distance(b.getLocation()) < 7) {
+						p2.setFoodLevel(p2.getFoodLevel() - num * 3);
+						if (num > 1) {
+							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num * 3));
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public String getAuraString(Player p, Player n) {
+		Location loc = p.getLocation();
+		String ret = "§b" + p.getName() + "§7 - §a" + ((int) p.getLocation().distance(n.getLocation()))
+				+ " blocks away at " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ();
+
+		return ret;
 	}
 
 	public boolean hasLearnedShout(Player p, int num) {
