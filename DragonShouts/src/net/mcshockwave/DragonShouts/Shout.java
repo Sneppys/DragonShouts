@@ -13,12 +13,15 @@ import net.mcshockwave.DragonShouts.Utils.PacketUtils.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -123,6 +126,27 @@ public enum Shout {
 		5,
 		5,
 		90),
+	Clear_Skies(
+		"Lok",
+		"Vah",
+		"Koor",
+		5,
+		10,
+		15),
+	Cyclone(
+		"Ven",
+		"Gar",
+		"Nos",
+		30,
+		45,
+		60),
+	Disarm(
+		"Zun",
+		"Haal",
+		"Viik",
+		30,
+		35,
+		50),
 	Dragonrend(
 		"Joor",
 		"Zah",
@@ -448,6 +472,57 @@ public enum Shout {
 						Player p2 = (Player) e;
 						if (e.getLocation().distance(b.getLocation()) < 7) {
 							p2.damage(10);
+						}
+					}
+				}
+			}
+		}
+
+		if (this == Clear_Skies) {
+			p.getWorld().playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
+			p.getWorld().setWeatherDuration(0);
+		}
+
+		if (this == Cyclone) {
+			Block[] bs = p.getLineOfSight(null, num * 2).toArray(new Block[0]);
+			List<Entity> near = p.getNearbyEntities(15, 15, 15);
+			p.getWorld().playSound(p.getLocation(), Sound.FIREWORK_LARGE_BLAST2, 3, 0);
+			for (Block b : bs) {
+				PacketUtils.playParticleEffect(ParticleEffect.EXPLODE, b.getLocation().add(0.5, 0.5, 0.5), 0, 0.3f,
+						num * 10);
+
+				for (Entity e : near) {
+					if (e.getLocation().distance(b.getLocation()) < 4) {
+						if (e instanceof LivingEntity) {
+							((LivingEntity) e).damage(num * 3);
+						}
+						e.setVelocity(e.getVelocity().add(new Vector(0, 1, 0)));
+					}
+				}
+			}
+		}
+
+		if (this == Disarm) {
+			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
+			List<Entity> near = p.getNearbyEntities(15, 15, 15);
+			p.getWorld().playSound(p.getLocation(), Sound.ANVIL_LAND, 1, 0);
+			if (num > 2) {
+				for (Block b : bs) {
+					PacketUtils.playParticleEffect(ParticleEffect.CRIT, b.getLocation().add(0.5, 0.5, 0.5), 1, 0.3f,
+							num * 15);
+
+					for (Entity e : near) {
+						if (!(e instanceof Player)) {
+							continue;
+						}
+						Player p2 = (Player) e;
+						if (e.getLocation().distance(b.getLocation()) < 7) {
+							ItemStack it = p2.getItemInHand();
+							if (it == null || it.getType() == Material.AIR)
+								continue;
+							Item i = p2.getWorld().dropItem(p2.getEyeLocation(), it);
+							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation()));
+							p2.setItemInHand(null);
 						}
 					}
 				}
