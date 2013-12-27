@@ -697,15 +697,11 @@ public enum Shout {
 			for (int i = 0; i < stop; i++) {
 				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
 					public void run() {
-						for (Monster m : aas.keySet()) {
-							Player p2 = aas.get(m);
-
-							if (p2 == p) {
-								if (m.isDead() || !m.isValid()) {
-									continue;
-								}
-								PacketUtils.playParticleEffect(ParticleEffect.SPELL, m.getEyeLocation(), 0.5f, 1, 35);
+						for (Monster m : kps) {
+							if (m.isDead() || !m.isValid()) {
+								continue;
 							}
+							PacketUtils.playParticleEffect(ParticleEffect.SPELL, m.getEyeLocation(), 0.5f, 1, 35);
 						}
 					}
 				}, i * 10);
