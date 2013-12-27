@@ -20,11 +20,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+
+import com.google.common.collect.Lists;
 
 public enum Shout {
 
@@ -154,6 +157,13 @@ public enum Shout {
 		30,
 		15,
 		5),
+	Animal_Allegiance(
+		"Raan",
+		"Mir",
+		"Tah",
+		50,
+		60,
+		70),
 	Dragonrend(
 		"Joor",
 		"Zah",
@@ -374,7 +384,7 @@ public enum Shout {
 
 		if (this == Dragonrend) {
 			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
-			List<Entity> near = p.getNearbyEntities(15, 15, 15);
+			List<Entity> near = p.getNearbyEntities(35, 35, 35);
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SHOOT, 0.5f, 0);
 			for (Block b : bs) {
 				PacketUtils.playParticleEffect(ParticleEffect.MAGIC_CRIT, b.getLocation().add(0.5, 0.5, 0.5), 1, 0.3f,
@@ -488,7 +498,9 @@ public enum Shout {
 
 		if (this == Clear_Skies) {
 			p.getWorld().playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
-			p.getWorld().setWeatherDuration(0);
+			if (num >= 3) {
+				p.getWorld().setWeatherDuration(0);
+			}
 		}
 
 		if (this == Cyclone) {
@@ -546,7 +558,53 @@ public enum Shout {
 				}
 			}
 		}
+
+		if (this == Animal_Allegiance) {
+			List<Entity> loe = p.getNearbyEntities(num * 10, num * 10, num * 10);
+			for (Entity e : loe) {
+				if (e instanceof Monster) {
+					Monster m = (Monster) e;
+					aas.put(m, p);
+				}
+			}
+			int stop = num * 20;
+			for (int i = 0; i < stop; i++) {
+				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+					public void run() {
+						for (Monster m : aas.keySet()) {
+							Player p2 = aas.get(m);
+
+							if (p2 == p) {
+								if (m.isDead() || !m.isValid()) {
+									continue;
+								}
+								PacketUtils.playParticleEffect(ParticleEffect.MOB_SPELL, m.getEyeLocation(), 0.5f, 1,
+										35);
+							}
+						}
+					}
+				}, i * 10);
+			}
+			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+				public void run() {
+					for (Monster m : Lists.newArrayList(aas.keySet())) {
+						Player p2 = aas.get(m);
+
+						if (p2 == p) {
+							if (m.isDead() || !m.isValid()) {
+								continue;
+							}
+							aas.remove(m);
+							PacketUtils.playBlockParticles(Material.ANVIL, 0, m.getEyeLocation());
+							m.getWorld().playSound(m.getEyeLocation(), Sound.ANVIL_LAND, 1, 2);
+						}
+					}
+				}
+			}, stop * 10);
+		}
 	}
+
+	public static HashMap<Monster, Player>	aas	= new HashMap<>();
 
 	public String getAuraString(Player p, Player n) {
 		Location loc = p.getLocation();

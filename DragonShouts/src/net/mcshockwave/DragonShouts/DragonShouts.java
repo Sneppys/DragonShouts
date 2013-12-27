@@ -52,7 +52,7 @@ public class DragonShouts extends JavaPlugin {
 		saveDefaultLD();
 		
 		reloadAll();
-
+		
 		if (enable_ww) {
 			wwpe = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 				public void run() {
@@ -63,6 +63,10 @@ public class DragonShouts extends JavaPlugin {
 				}
 			}, 100, 10);
 		}
+	}
+	
+	public void setEnabled() {
+		this.setEnabled(true);
 	}
 
 	public void reloadAll() {

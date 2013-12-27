@@ -93,7 +93,7 @@ public class PacketUtils {
 		sendPacketGlobally(l, 20, generateBlockParticles(m, data, l));
 	}
 
-	public static void playParticleEffect(ParticleEffect pe, Location l, int rad, float speed, int amount) {
+	public static void playParticleEffect(ParticleEffect pe, Location l, float rad, float speed, int amount) {
 		sendPacketGlobally(l, 20, generateParticles(pe, l, rad, speed, amount));
 	}
 

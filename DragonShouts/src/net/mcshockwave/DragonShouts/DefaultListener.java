@@ -9,12 +9,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -113,6 +116,18 @@ public class DefaultListener implements Listener {
 				DragonShouts.ins.saveLearnedData();
 			} else
 				event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
+	public void onEntityTarget(EntityTargetEvent event) {
+		Entity e = event.getEntity();
+		if (e instanceof Monster) {
+			Monster m = (Monster) e;
+			Entity t = m.getTarget();
+			if (Shout.aas.get(m) == t) {
+				event.setCancelled(true);
+			}
 		}
 	}
 
