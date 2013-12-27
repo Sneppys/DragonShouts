@@ -655,7 +655,7 @@ public enum Shout {
 			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
 				public void run() {
 					PacketUtils.playParticleEffect(ParticleEffect.LAVA, ed.getLocation(), 0, 1, 25);
-					ed.setHealth(0);
+					ed.remove();
 				}
 			}, 1200);
 		}
@@ -750,7 +750,7 @@ public enum Shout {
 			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
 				public void run() {
 					PacketUtils.playParticleEffect(ParticleEffect.LAVA, ed.getLocation(), 0, 1, 25);
-					ed.setHealth(0);
+					ed.remove();
 				}
 			}, 1200);
 		}
