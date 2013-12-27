@@ -661,27 +661,26 @@ public enum Shout {
 		}
 
 		if (this == Call_of_Valor) {
-			if (num < 3) {
-				return;
-			}
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 1.6f);
-			final Wolf w = (Wolf) p.getWorld().spawnEntity(LocUtils.addRand(p.getLocation().clone(), 5, 0, 5),
-					EntityType.WOLF);
-			w.setTamed(true);
-			w.setOwner(p);
-			w.setCollarColor(DyeColor.BLACK);
-			w.setAngry(true);
-			w.setCustomName(p.getName() + "'s Summon");
-			w.setCustomNameVisible(true);
-			w.setMaxHealth(30);
-			w.setHealth(w.getMaxHealth());
-			w.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000000, 1));
-			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
-				public void run() {
-					PacketUtils.playParticleEffect(ParticleEffect.LAVA, w.getLocation(), 0, 1, 25);
-					w.setHealth(0);
-				}
-			}, 1200);
+			for (int i = 0; i < num; i++) {
+				final Wolf w = (Wolf) p.getWorld().spawnEntity(LocUtils.addRand(p.getLocation().clone(), 5, 0, 5),
+						EntityType.WOLF);
+				w.setTamed(true);
+				w.setOwner(p);
+				w.setCollarColor(DyeColor.BLACK);
+				w.setAngry(true);
+				w.setCustomName(p.getName() + "'s Summon");
+				w.setCustomNameVisible(true);
+				w.setMaxHealth(30);
+				w.setHealth(w.getMaxHealth());
+				w.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000000, 1));
+				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+					public void run() {
+						PacketUtils.playParticleEffect(ParticleEffect.LAVA, w.getLocation(), 0, 1, 25);
+						w.setHealth(0);
+					}
+				}, 1200);
+			}
 		}
 
 		if (this == Kynes_Peace) {
