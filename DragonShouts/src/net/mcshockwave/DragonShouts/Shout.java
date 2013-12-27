@@ -12,16 +12,20 @@ import net.mcshockwave.DragonShouts.Utils.PacketUtils.ParticleEffect;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -164,6 +168,41 @@ public enum Shout {
 		50,
 		60,
 		70),
+	Call_Dragon(
+		"Od",
+		"Ah",
+		"Viing",
+		5,
+		5,
+		300),
+	Summon_Durnehviir(
+		"Dur",
+		"Neh",
+		"Viir",
+		5,
+		5,
+		300),
+	Call_of_Valor(
+		"Hun",
+		"Kaal",
+		"Zor",
+		5,
+		5,
+		180),
+	Kynes_Peace(
+		"Kaan",
+		"Drem",
+		"Ov",
+		40,
+		50,
+		60),
+	Slow_Time(
+		"Tiid",
+		"Klo",
+		"Ul",
+		30,
+		45,
+		60),
 	Dragonrend(
 		"Joor",
 		"Zah",
@@ -560,6 +599,7 @@ public enum Shout {
 		}
 
 		if (this == Animal_Allegiance) {
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 1.8f);
 			List<Entity> loe = p.getNearbyEntities(num * 10, num * 10, num * 10);
 			for (Entity e : loe) {
 				if (e instanceof Monster) {
@@ -602,9 +642,125 @@ public enum Shout {
 				}
 			}, stop * 10);
 		}
+
+		if (this == Call_Dragon) {
+			if (num < 3) {
+				return;
+			}
+			final EnderDragon ed = (EnderDragon) p.getWorld().spawnEntity(
+					LocUtils.addRand(p.getLocation().clone(), 50, 50, 50).add(0, 50, 0), EntityType.ENDER_DRAGON);
+			ed.setCustomName("Odahviing");
+			summoned.put(ed, p);
+
+			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+				public void run() {
+					PacketUtils.playParticleEffect(ParticleEffect.LAVA, ed.getLocation(), 0, 1, 25);
+					ed.setHealth(0);
+				}
+			}, 1200);
+		}
+
+		if (this == Call_of_Valor) {
+			if (num < 3) {
+				return;
+			}
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 1.6f);
+			final Wolf w = (Wolf) p.getWorld().spawnEntity(LocUtils.addRand(p.getLocation().clone(), 5, 0, 5),
+					EntityType.WOLF);
+			w.setTamed(true);
+			w.setOwner(p);
+			w.setCollarColor(DyeColor.BLACK);
+			w.setAngry(true);
+			w.setCustomName(p.getName() + "'s Summon");
+			w.setCustomNameVisible(true);
+			w.setMaxHealth(30);
+			w.setHealth(w.getMaxHealth());
+			w.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 100000000, 1));
+			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+				public void run() {
+					PacketUtils.playParticleEffect(ParticleEffect.LAVA, w.getLocation(), 0, 1, 25);
+					w.setHealth(0);
+				}
+			}, 1200);
+		}
+
+		if (this == Kynes_Peace) {
+			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 1.8f);
+			List<Entity> loe = p.getNearbyEntities(num * 30, num * 30, num * 30);
+			for (Entity e : loe) {
+				if (e instanceof Monster) {
+					Monster m = (Monster) e;
+					kps.add(m);
+				}
+			}
+			int stop = num * 20;
+			for (int i = 0; i < stop; i++) {
+				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+					public void run() {
+						for (Monster m : aas.keySet()) {
+							Player p2 = aas.get(m);
+
+							if (p2 == p) {
+								if (m.isDead() || !m.isValid()) {
+									continue;
+								}
+								PacketUtils.playParticleEffect(ParticleEffect.SPELL, m.getEyeLocation(), 0.5f, 1, 35);
+							}
+						}
+					}
+				}, i * 10);
+			}
+			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+				public void run() {
+					for (Monster m : Lists.newArrayList(aas.keySet())) {
+						Player p2 = aas.get(m);
+
+						if (p2 == p) {
+							if (m.isDead() || !m.isValid()) {
+								continue;
+							}
+							kps.remove(m);
+							PacketUtils.playBlockParticles(Material.ANVIL, 0, m.getEyeLocation());
+							m.getWorld().playSound(m.getEyeLocation(), Sound.ANVIL_LAND, 1, 2);
+						}
+					}
+				}
+			}, stop * 10);
+		}
+
+		if (this == Slow_Time) {
+			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0);
+			for (Entity e : p.getNearbyEntities(num * 30, num * 30, num * 30)) {
+				e.setVelocity(e.getVelocity().multiply(1 / num * 3));
+				if (e instanceof LivingEntity) {
+					((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, num * 60, num));
+				}
+			}
+		}
+
+		if (this == Summon_Durnehviir) {
+			if (num < 3) {
+				return;
+			}
+			final EnderDragon ed = (EnderDragon) p.getWorld().spawnEntity(
+					LocUtils.addRand(p.getLocation().clone(), 50, 50, 50).add(0, 50, 0), EntityType.ENDER_DRAGON);
+			ed.setCustomName("Durnehviir");
+			summoned.put(ed, p);
+
+			Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
+				public void run() {
+					PacketUtils.playParticleEffect(ParticleEffect.LAVA, ed.getLocation(), 0, 1, 25);
+					ed.setHealth(0);
+				}
+			}, 1200);
+		}
 	}
 
-	public static HashMap<Monster, Player>	aas	= new HashMap<>();
+	public static HashMap<Monster, Player>		aas			= new HashMap<>();
+
+	public static ArrayList<Monster>			kps			= new ArrayList<>();
+
+	public static HashMap<EnderDragon, Player>	summoned	= new HashMap<>();
 
 	public String getAuraString(Player p, Player n) {
 		Location loc = p.getLocation();

@@ -1,6 +1,8 @@
 package net.mcshockwave.DragonShouts.Commands;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.mcshockwave.DragonShouts.DragonShouts;
@@ -145,7 +147,13 @@ public class ShoutCommand implements CommandExecutor {
 				}
 			} else {
 				p.sendMessage(ChatColor.GRAY + "All shouts: ");
+				ArrayList<String> snames = new ArrayList<>();
 				for (Shout s : Shout.values()) {
+					snames.add(s.name());
+				}
+				Collections.sort(snames, Collator.getInstance());
+				for (String sn : snames) {
+					Shout s = Shout.valueOf(sn);
 					if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name())
 							|| !DragonShouts.perms_enabled) {
 						if (DragonShouts.require_learn && s.hasLearnedShout(p, 1)) {
