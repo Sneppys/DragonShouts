@@ -21,6 +21,36 @@ public class ShoutCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (!(sender instanceof Player)) {
+			if (args[0].equalsIgnoreCase("teachall") && sender.isOp()) {
+				if (args.length > 1) {
+					Player p2 = Bukkit.getPlayer(args[1]);
+					if (p2 != null) {
+						for (Shout s : Shout.values()) {
+							for (int i = 0; i <= (4 - (s.getLearnLevel(p2) - 1)); i++) {
+								s.setLearned(p2);
+							}
+						}
+						p2.sendMessage(DragonShouts.prefix + "Learned all shouts from §a" + sender.getName());
+						sender.sendMessage(DragonShouts.prefix + "Taught all shouts to §a" + p2.getName());
+					}
+				}
+			}
+			if (args[0].equalsIgnoreCase("teach") && sender.isOp()) {
+				if (args.length > 2) {
+					try {
+						Player p2 = Bukkit.getPlayer(args[1]);
+						Shout s = Shout.get(args[2]);
+						if (p2 != null) {
+							s.setLearnedWithEffect(p2, null);
+							sender.sendMessage(DragonShouts.prefix + "Taught §a" + s.name + "§7 to §a" + p2.getName());
+						}
+					} catch (Exception e) {
+						sender.sendMessage(DragonShouts.prefix + "Invalid args");
+					}
+				}
+			}
+		}
 		if (sender instanceof Player && (sender.isOp() || !DragonShouts.op_only)) {
 
 			Player p = (Player) sender;

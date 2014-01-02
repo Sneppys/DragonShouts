@@ -88,8 +88,8 @@ public enum Shout {
 		"Mul",
 		"Qah",
 		"Diiv",
-		600,
-		600,
+		200,
+		400,
 		600),
 	Aura_Whisper(
 		"Laas",
@@ -555,7 +555,7 @@ public enum Shout {
 						if (e instanceof LivingEntity) {
 							((LivingEntity) e).damage(num * 3);
 						}
-						e.setVelocity(e.getVelocity().add(new Vector(0, 0.3, 0)));
+						e.setVelocity(e.getVelocity().add(new Vector(0, num * 0.08f, 0)));
 					}
 				}
 			}
