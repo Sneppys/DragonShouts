@@ -308,7 +308,7 @@ public enum Shout {
 			List<Entity> near = p.getNearbyEntities(15, 15, 15);
 			p.getWorld().playSound(p.getLocation(), Sound.GHAST_FIREBALL, 1, 0);
 			for (Block b : bs) {
-				PacketUtils.playParticleEffect(ParticleEffect.FLAME, b.getLocation().add(0.5, 0.5, 0.5), 0, 0.3f,
+				PacketUtils.playParticleEffect(ParticleEffect.FLAME, b.getLocation().add(0.5, 0.5, 0.5), 0, 0.1f,
 						num * 15);
 
 				for (Entity e : near) {
@@ -580,7 +580,7 @@ public enum Shout {
 							if (it == null || it.getType() == Material.AIR)
 								continue;
 							Item i = p2.getWorld().dropItem(p2.getEyeLocation(), it);
-							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation()));
+							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation()).multiply(0.2));
 							p2.setItemInHand(null);
 						}
 					}
