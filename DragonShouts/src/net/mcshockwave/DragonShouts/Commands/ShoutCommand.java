@@ -57,8 +57,12 @@ public class ShoutCommand implements CommandExecutor {
 
 			if (args.length > 0) {
 				if (args[0].equalsIgnoreCase("reload") && p.isOp()) {
+					DragonShouts.ins.saveConfig();
+					DragonShouts.ins.saveLearnedData();
+					
 					DragonShouts.ins.reloadConfig();
 					DragonShouts.ins.reloadLearnedData();
+					
 					DragonShouts.ins.reloadAll();
 
 					p.sendMessage(DragonShouts.prefix + "Configuration reloaded!");
