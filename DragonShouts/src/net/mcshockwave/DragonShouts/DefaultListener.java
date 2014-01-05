@@ -67,7 +67,7 @@ public class DefaultListener implements Listener {
 			select.put(p, b);
 		}
 
-		if (a.name().contains("RIGHT_CLICK") && it.hasItemMeta()) {
+		if (a.name().contains("RIGHT_CLICK") && ItemMetaUtils.hasLore(it)) {
 			String pre = "§aBound>";
 			List<String> lo = ItemMetaUtils.getLore(it);
 
