@@ -31,7 +31,7 @@ public class DragonShouts extends JavaPlugin {
 	public static FileConfiguration		learnedData		= null;
 	public static File					learnedDataFile	= null;
 
-	public static boolean				op_only, perms_enabled, enable_cooldown, require_learn, enable_ww,
+	public static boolean				op_only, bypass_opcool, perms_enabled, enable_cooldown, require_learn, enable_ww,
 			broadcast_enabled;
 	public static int					broadcast_range;
 	public static String				broadcast_format;
@@ -78,6 +78,7 @@ public class DragonShouts extends JavaPlugin {
 		broadcast_enabled = getConfig().getBoolean("broadcast.enabled");
 		broadcast_range = getConfig().getInt("broadcast.range");
 		broadcast_format = getConfig().getString("broadcast.format");
+		bypass_opcool = getConfig().getBoolean("op_bypass_cooldown");
 
 		word_walls = getWordWalls();
 	}

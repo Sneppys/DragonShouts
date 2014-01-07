@@ -249,7 +249,7 @@ public enum Shout {
 			return;
 		}
 
-		if (DragonShouts.enable_cooldown) {
+		if (DragonShouts.enable_cooldown && (!p.isOp() || p.isOp() && !DragonShouts.bypass_opcool)) {
 			if (cooldown.containsKey(p)
 					&& cooldown.get(p) > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())) {
 				p.sendMessage(DragonShouts.prefix + "You can't shout for another "
