@@ -59,10 +59,10 @@ public class ShoutCommand implements CommandExecutor {
 				if (args[0].equalsIgnoreCase("reload") && p.isOp()) {
 					DragonShouts.ins.saveConfig();
 					DragonShouts.ins.saveLearnedData();
-					
+
 					DragonShouts.ins.reloadConfig();
 					DragonShouts.ins.reloadLearnedData();
-					
+
 					DragonShouts.ins.reloadAll();
 
 					p.sendMessage(DragonShouts.prefix + "Configuration reloaded!");
@@ -127,7 +127,10 @@ public class ShoutCommand implements CommandExecutor {
 				if (args.length == 1) {
 					for (Shout s : Shout.values()) {
 						if (args[0].equalsIgnoreCase(s.w1)) {
-							if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name())
+							if (DragonShouts.perms_enabled
+									&& (p.hasPermission("dragonshouts.shout." + s.name() + ".1")
+											|| p.hasPermission("dragonshouts.shout." + s.name() + ".2") || p
+												.hasPermission("dragonshouts.shout." + s.name() + ".3"))
 									|| !DragonShouts.perms_enabled) {
 								if (DragonShouts.require_learn && s.hasLearnedShout(p, 1)
 										|| !DragonShouts.require_learn) {
@@ -145,7 +148,9 @@ public class ShoutCommand implements CommandExecutor {
 				if (args.length == 2) {
 					for (Shout s : Shout.values()) {
 						if (args[0].equalsIgnoreCase(s.w1) && args[1].equalsIgnoreCase(s.w2)) {
-							if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name())
+							if (DragonShouts.perms_enabled
+									&& (p.hasPermission("dragonshouts.shout." + s.name() + ".2") || p
+											.hasPermission("dragonshouts.shout." + s.name() + ".3"))
 									|| !DragonShouts.perms_enabled) {
 								if (DragonShouts.require_learn && s.hasLearnedShout(p, 2)
 										|| !DragonShouts.require_learn) {
@@ -164,7 +169,7 @@ public class ShoutCommand implements CommandExecutor {
 					for (Shout s : Shout.values()) {
 						if (args[0].equalsIgnoreCase(s.w1) && args[1].equalsIgnoreCase(s.w2)
 								&& args[2].equalsIgnoreCase(s.w3)) {
-							if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name())
+							if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name() + ".3")
 									|| !DragonShouts.perms_enabled) {
 								if (DragonShouts.require_learn && s.hasLearnedShout(p, 3)
 										|| !DragonShouts.require_learn) {
