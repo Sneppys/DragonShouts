@@ -213,6 +213,7 @@ public enum Shout {
 
 	public String	name, w1, w2, w3;
 	public int		c1, c2, c3;
+	public double	power;
 
 	Shout(String w1, String w2, String w3, int cool1, int cool2, int cool3) {
 		this.name = name().replace('_', ' ');
@@ -223,6 +224,8 @@ public enum Shout {
 		this.c1 = cool1;
 		this.c2 = cool2;
 		this.c3 = cool3;
+
+		this.power = 1;
 	}
 
 	public int getCooldown(int num) {
@@ -242,11 +245,10 @@ public enum Shout {
 
 	public static HashMap<Player, Long>	cooldown	= new HashMap<>();
 
-	@SuppressWarnings("deprecation")
-	public void shout(final Player p, final int num) {
+	public boolean shoutCooldowns(final Player p, final int num) {
 		if (!hasLearnedShout(p, num)) {
 			p.sendMessage(DragonShouts.prefix + "You haven't learned that shout yet!");
-			return;
+			return false;
 		}
 
 		if (DragonShouts.enable_cooldown && (!p.isOp() || p.isOp() && !DragonShouts.bypass_opcool)) {
@@ -254,7 +256,7 @@ public enum Shout {
 					&& cooldown.get(p) > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())) {
 				p.sendMessage(DragonShouts.prefix + "You can't shout for another "
 						+ (cooldown.get(p) - TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis())) + " seconds!");
-				return;
+				return false;
 			} else {
 				cooldown.remove(p);
 				cooldown.put(p, TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()) + getCooldown(num));
@@ -285,6 +287,14 @@ public enum Shout {
 				}
 			}
 		}
+		return true;
+	}
+
+	@SuppressWarnings("deprecation")
+	public void shout(final Player p, final int num) {
+		if (!shoutCooldowns(p, num)) {
+			return;
+		}
 
 		if (this == Unrelenting_Force) {
 			Block[] bs = p.getLineOfSight(null, (num * 4) + 2).toArray(new Block[0]);
@@ -297,7 +307,7 @@ public enum Shout {
 				for (Entity e : near) {
 					if (e.getLocation().distance(b.getLocation()) < 4) {
 						e.setVelocity(LocUtils.getVelocity(p.getLocation(), e.getLocation()).multiply(num / 2 + 1)
-								.add(new Vector(0, 0.1, 0)));
+								.multiply(power).add(new Vector(0, 0.1, 0)));
 					}
 				}
 			}
@@ -313,7 +323,7 @@ public enum Shout {
 
 				for (Entity e : near) {
 					if (e.getLocation().distance(b.getLocation()) < 4) {
-						e.setFireTicks(100 * num);
+						e.setFireTicks((int) (100 * num * power));
 					}
 				}
 			}
@@ -333,7 +343,7 @@ public enum Shout {
 					}
 					LivingEntity le = (LivingEntity) e;
 					if (e.getLocation().distance(b.getLocation()) < 4) {
-						le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, num * 20, 25));
+						le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (num * 20 * power), 25));
 					}
 				}
 			}
@@ -353,23 +363,23 @@ public enum Shout {
 					}
 					LivingEntity le = (LivingEntity) e;
 					if (e.getLocation().distance(b.getLocation()) < 4) {
-						le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, num * 50, num - 1));
-						le.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num - 1));
+						le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (num * 50 * power), num - 1));
+						le.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (int) (num * 20 * power), num - 1));
 					}
 				}
 			}
 		}
 
 		if (this == Whirlwind_Sprint) {
-			p.setVelocity(p.getLocation().getDirection().multiply((num * 2) + 3).setY(0.4f));
+			p.setVelocity(p.getLocation().getDirection().multiply((num * 2) + 3).multiply(power).setY(0.4f));
 			p.getWorld().playSound(p.getLocation(), Sound.BAT_TAKEOFF, 1, 0);
 		}
 
 		if (this == Become_Ethereal) {
 			p.getWorld().playSound(p.getLocation(), Sound.FIZZ, 1, 0);
 
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, num * 150, 50));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, num * 150, 50));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (int) (num * 150 * power), 50));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, (int) (num * 150 * power), 50));
 		}
 
 		if (this == Dragon_Aspect) {
@@ -377,9 +387,9 @@ public enum Shout {
 
 			int dur = num * 300;
 
-			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, dur, 3));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, dur, 2));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, dur, 1));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (int) (dur * power), 3));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (dur * power), 2));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, (int) (dur * power), 1));
 
 			for (int i = 0; i < dur / 5; i++) {
 				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
@@ -396,7 +406,7 @@ public enum Shout {
 			Location l = p.getLocation();
 			boolean ce = DragonShouts.enable_cooldown;
 
-			for (int i = 0; i < rand.nextInt(5 + num) + (num * 2) + (ce ? 10 : 0); i++) {
+			for (int i = 0; i < rand.nextInt(5 + num) + (num * 2 * power) + (ce ? 10 : 0); i++) {
 				final Location l2 = LocUtils.addRand(l.clone(), 50, 25, 50);
 
 				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
@@ -413,7 +423,7 @@ public enum Shout {
 
 						for (Player p2 : Bukkit.getOnlinePlayers()) {
 							if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(m) < 10) {
-								p2.setFireTicks(num * 100);
+								p2.setFireTicks((int) (num * 100 * power));
 							}
 						}
 					}
@@ -422,7 +432,7 @@ public enum Shout {
 		}
 
 		if (this == Dragonrend) {
-			Block[] bs = p.getLineOfSight(null, (num * 6) + 2).toArray(new Block[0]);
+			Block[] bs = p.getLineOfSight(null, (int) ((num * 6) + 2 * power)).toArray(new Block[0]);
 			List<Entity> near = p.getNearbyEntities(35, 35, 35);
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SHOOT, 0.5f, 0);
 			for (Block b : bs) {
@@ -447,7 +457,7 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_HIT, 1, 0);
 			p.sendMessage("§a[Aura Whisper] §7All nearby players:");
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 50) {
+				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 50 * power) {
 					p.sendMessage(getAuraString(p2, p));
 				}
 			}
@@ -467,8 +477,8 @@ public enum Shout {
 					}
 					Player p2 = (Player) e;
 					if (e.getLocation().distance(b.getLocation()) < 7) {
-						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, num * 120, -num * 2));
-						p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num - 1));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (int) (num * 120 * power), -num * 2));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (int) (num * 20 * power), num - 1));
 					}
 				}
 			}
@@ -488,9 +498,9 @@ public enum Shout {
 					}
 					Player p2 = (Player) e;
 					if (e.getLocation().distance(b.getLocation()) < 7) {
-						p2.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, num * 20, num * 4));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (num * 20 * power), num * 4));
 						if (num > 1) {
-							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, num * 20, num * 3));
+							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (int) (num * 20 * power), num * 3));
 						}
 					}
 				}
@@ -501,16 +511,16 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
 				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 8) {
-					p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, num * 100, num - 1));
-					p2.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, num * 100, num - 1));
+					p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (int) (num * 100 * power), num - 1));
+					p2.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (num * 100 * power), num - 1));
 				}
 			}
 		}
 
 		if (this == Elemental_Fury) {
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
-			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, num * 100, num - 1));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, num * 100, num - 1));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (int) (num * 100 * power), num - 1));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (num * 100 * power), num - 1));
 		}
 
 		if (this == Soul_Tear) {
@@ -528,7 +538,7 @@ public enum Shout {
 						}
 						Player p2 = (Player) e;
 						if (e.getLocation().distance(b.getLocation()) < 7) {
-							p2.damage(10);
+							p2.damage(10 * power);
 						}
 					}
 				}
@@ -539,7 +549,7 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
 			if (num >= 3) {
 				p.getWorld().setWeatherDuration(0);
-			}
+			} else p.getWorld().setWeatherDuration((int) (1000 / num / power));
 		}
 
 		if (this == Cyclone) {
@@ -555,7 +565,7 @@ public enum Shout {
 						if (e instanceof LivingEntity) {
 							((LivingEntity) e).damage(num * 3);
 						}
-						e.setVelocity(e.getVelocity().add(new Vector(0, num * 0.08f, 0)));
+						e.setVelocity(e.getVelocity().add(new Vector(0, num * 0.08f * power, 0)));
 					}
 				}
 			}
@@ -580,7 +590,7 @@ public enum Shout {
 							if (it == null || it.getType() == Material.AIR)
 								continue;
 							Item i = p2.getWorld().dropItem(p2.getEyeLocation(), it);
-							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation()).multiply(0.2));
+							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation()).multiply(0.05 * power));
 							p2.setItemInHand(null);
 						}
 					}
@@ -592,7 +602,7 @@ public enum Shout {
 			Sound s = Sound.values()[rand.nextInt(Sound.values().length)];
 			int pit = rand.nextInt(3);
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2.getWorld() == p.getWorld() && p2.getLocation().distance(p.getLocation()) < num * 30) {
+				if (p2.getWorld() == p.getWorld() && p2.getLocation().distance(p.getLocation()) < num * 30 * power) {
 					p2.playSound(LocUtils.addRand(p2.getLocation().clone(), 10, 10, 10), s, 5, pit);
 				}
 			}
@@ -607,7 +617,7 @@ public enum Shout {
 					aas.put(m, p);
 				}
 			}
-			int stop = num * 20;
+			int stop = (int) (num * 20 * power);
 			for (int i = 0; i < stop; i++) {
 				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
 					public void run() {
@@ -657,7 +667,7 @@ public enum Shout {
 					PacketUtils.playParticleEffect(ParticleEffect.LAVA, ed.getLocation(), 0, 1, 25);
 					ed.remove();
 				}
-			}, 1200);
+			}, (long) (1200 * power));
 		}
 
 		if (this == Call_of_Valor) {
@@ -679,7 +689,7 @@ public enum Shout {
 						PacketUtils.playParticleEffect(ParticleEffect.LAVA, w.getLocation(), 0, 1, 25);
 						w.setHealth(0);
 					}
-				}, 1200);
+				}, (long) (1200 * power));
 			}
 		}
 
@@ -692,7 +702,7 @@ public enum Shout {
 					kps.add(m);
 				}
 			}
-			int stop = num * 20;
+			int stop = (int) (num * 20 * power);
 			for (int i = 0; i < stop; i++) {
 				Bukkit.getScheduler().runTaskLater(DragonShouts.ins, new Runnable() {
 					public void run() {
@@ -726,7 +736,7 @@ public enum Shout {
 		if (this == Slow_Time) {
 			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1, 0);
 			for (Entity e : p.getNearbyEntities(num * 30, num * 30, num * 30)) {
-				e.setVelocity(e.getVelocity().multiply(1 / num * 3));
+				e.setVelocity(e.getVelocity().multiply(1 / num * 3 * power));
 				if (e instanceof LivingEntity) {
 					((LivingEntity) e).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, num * 60, num));
 				}
@@ -747,7 +757,7 @@ public enum Shout {
 					PacketUtils.playParticleEffect(ParticleEffect.LAVA, ed.getLocation(), 0, 1, 25);
 					ed.remove();
 				}
-			}, 1200);
+			}, (long) (1200 * power));
 		}
 	}
 
