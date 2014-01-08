@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import net.mcshockwave.DragonShouts.Commands.ShoutCommand;
+import net.mcshockwave.DragonShouts.Updater.Updater;
 import net.mcshockwave.DragonShouts.Utils.PacketUtils;
 import net.mcshockwave.DragonShouts.Utils.PacketUtils.ParticleEffect;
 
@@ -31,8 +32,8 @@ public class DragonShouts extends JavaPlugin {
 	public static FileConfiguration		learnedData		= null;
 	public static File					learnedDataFile	= null;
 
-	public static boolean				op_only, bypass_opcool, perms_enabled, enable_cooldown, require_learn, enable_ww,
-			broadcast_enabled;
+	public static boolean				op_only, bypass_opcool, perms_enabled, enable_cooldown, require_learn,
+			enable_ww, broadcast_enabled;
 	public static int					broadcast_range;
 	public static String				broadcast_format;
 
@@ -45,14 +46,18 @@ public class DragonShouts extends JavaPlugin {
 
 		Bukkit.getPluginManager().registerEvents(new DefaultListener(), this);
 
+		if (getConfig().getBoolean("auto_update")) {
+			new Updater(this, 71144, getFile(), Updater.UpdateType.DEFAULT, true);
+		}
+
 		ins = this;
 		prefix = "§a[" + getDescription().getName() + "] §7";
 
 		saveDefaultConfig();
 		saveDefaultLD();
-		
+
 		reloadAll();
-		
+
 		if (enable_ww) {
 			wwpe = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 				public void run() {
@@ -64,7 +69,7 @@ public class DragonShouts extends JavaPlugin {
 			}, 100, 10);
 		}
 	}
-	
+
 	public void setEnabled() {
 		this.setEnabled(true);
 	}
@@ -113,14 +118,14 @@ public class DragonShouts extends JavaPlugin {
 			getLogger().log(Level.SEVERE, "Could not save config to " + learnedDataFile, ex);
 		}
 	}
-	
+
 	public void saveDefaultLD() {
-	    if (learnedDataFile == null) {
-	    	learnedDataFile = new File(getDataFolder(), "learnedShouts.yml");
-	    }
-	    if (!learnedDataFile.exists()) {            
-	         this.saveResource("learnedShouts.yml", false);
-	     }
+		if (learnedDataFile == null) {
+			learnedDataFile = new File(getDataFolder(), "learnedShouts.yml");
+		}
+		if (!learnedDataFile.exists()) {
+			this.saveResource("learnedShouts.yml", false);
+		}
 	}
 
 	public HashMap<Block, Shout> getWordWalls() {

@@ -57,7 +57,7 @@ public class DefaultListener implements Listener {
 		}
 
 		if (a == Action.RIGHT_CLICK_BLOCK && p.isOp() && DragonShouts.enable_ww && it.getType() == Material.BOOK
-				&& b.getType() == Material.BOOKSHELF) {
+				&& b.getType() == Material.BOOKSHELF && !DragonShouts.ins.getWordWalls().containsKey(b)) {
 			int le = Shout.values().length;
 			Inventory i = Bukkit.createInventory(null, (le + (9 - (le % 9))), "Shouts");
 			for (Shout s : Shout.values()) {
@@ -116,6 +116,14 @@ public class DefaultListener implements Listener {
 		if (DragonShouts.enable_ww && DragonShouts.word_walls.containsKey(b)) {
 			if (p.isOp()) {
 				DragonShouts.word_walls.remove(b);
+				List<String> uww = DragonShouts.ins.getLearnedData().getStringList("used_word_walls");
+				for (String s : uww.toArray(new String[0])) { // preventing
+																// ConcurrentModificationException
+																// here
+					if (DragonShouts.ins.transUseWW(p, b).equalsIgnoreCase(s)) {
+						uww.remove(s);
+					}
+				}
 				p.sendMessage(DragonShouts.prefix + "Word Wall destroyed!");
 				DragonShouts.ins.saveLearnedData();
 			} else
