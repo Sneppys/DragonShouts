@@ -117,7 +117,6 @@ public class DragonShouts extends JavaPlugin {
 		}
 		
 		saveShoutCon();
-		reloadShoutCon();
 	}
 
 	public void reloadShoutCon() {

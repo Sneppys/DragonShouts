@@ -1,3 +1,5 @@
 # Configuration for individual shouts
+# cooldown - Cooldown for shout w/ power
+# power - Power of the shout (potion effect duration, etc)
 
 shouts:
