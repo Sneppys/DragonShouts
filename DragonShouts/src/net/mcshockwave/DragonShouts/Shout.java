@@ -457,7 +457,8 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.ENDERDRAGON_HIT, 1, 0);
 			p.sendMessage("§a[Aura Whisper] §7All nearby players:");
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
-				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 50 * power) {
+				if (p2.getWorld() == p.getWorld() && p2 != p
+						&& p2.getLocation().distance(p.getLocation()) < num * 50 * power) {
 					p.sendMessage(getAuraString(p2, p));
 				}
 			}
@@ -477,7 +478,8 @@ public enum Shout {
 					}
 					Player p2 = (Player) e;
 					if (e.getLocation().distance(b.getLocation()) < 7) {
-						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, (int) (num * 120 * power), -num * 2));
+						p2.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,
+								(int) (num * 120 * power), -num * 2));
 						p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (int) (num * 20 * power), num - 1));
 					}
 				}
@@ -500,7 +502,8 @@ public enum Shout {
 					if (e.getLocation().distance(b.getLocation()) < 7) {
 						p2.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (int) (num * 20 * power), num * 4));
 						if (num > 1) {
-							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (int) (num * 20 * power), num * 3));
+							p2.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (int) (num * 20 * power),
+									num * 3));
 						}
 					}
 				}
@@ -511,8 +514,10 @@ public enum Shout {
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
 			for (Player p2 : Bukkit.getOnlinePlayers()) {
 				if (p2.getWorld() == p.getWorld() && p2 != p && p2.getLocation().distance(p.getLocation()) < num * 8) {
-					p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (int) (num * 100 * power), num - 1));
-					p2.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (num * 100 * power), num - 1));
+					p2.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (int) (num * 100 * power),
+							num - 1));
+					p2.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (num * 100 * power),
+							num - 1));
 				}
 			}
 		}
@@ -548,8 +553,9 @@ public enum Shout {
 		if (this == Clear_Skies) {
 			p.getWorld().playSound(p.getLocation(), Sound.AMBIENCE_THUNDER, 5, 1);
 			if (num >= 3) {
-				p.getWorld().setWeatherDuration(0);
-			} else p.getWorld().setWeatherDuration((int) (1000 / num / power));
+				p.getWorld().setStorm(false);
+			} else
+				p.getWorld().setWeatherDuration((int) (500 / num / power));
 		}
 
 		if (this == Cyclone) {
@@ -590,7 +596,8 @@ public enum Shout {
 							if (it == null || it.getType() == Material.AIR)
 								continue;
 							Item i = p2.getWorld().dropItem(p2.getEyeLocation(), it);
-							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation()).multiply(0.05 * power));
+							i.setVelocity(LocUtils.getVelocity(p.getLocation(), p2.getLocation())
+									.multiply(0.05 * power));
 							p2.setItemInHand(null);
 						}
 					}
