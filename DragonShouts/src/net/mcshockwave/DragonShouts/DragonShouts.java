@@ -15,6 +15,7 @@ import net.mcshockwave.DragonShouts.Utils.PacketUtils.ParticleEffect;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -66,6 +67,8 @@ public class DragonShouts extends JavaPlugin {
 			wwpe = Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
 				public void run() {
 					for (Block b : word_walls.keySet()) {
+						if (b == null || b.getType() != Material.ENCHANTMENT_TABLE)
+							return;
 						PacketUtils.playParticleEffect(ParticleEffect.ENCHANTMENT_TABLE,
 								b.getLocation().add(0.5, 0.5, 0.5), 0, 1, 25);
 					}
@@ -115,7 +118,7 @@ public class DragonShouts extends JavaPlugin {
 			} else
 				sc.set(path + "power", s.power);
 		}
-		
+
 		saveShoutCon();
 	}
 

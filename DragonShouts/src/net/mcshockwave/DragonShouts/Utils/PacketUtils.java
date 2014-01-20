@@ -79,7 +79,7 @@ public class PacketUtils {
 		ANGRY_VILLAGER(
 			"angryVillager"),
 		HAPPY_VILLAGER(
-			"happerVillager");
+			"happyVillager");
 
 		public String	particleName;
 

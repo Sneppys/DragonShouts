@@ -42,7 +42,7 @@ public class DefaultListener implements Listener {
 			Shout s = DragonShouts.word_walls.get(b);
 			if (!s.hasLearnedShout(p, 3)) {
 				if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name())
-						|| !DragonShouts.perms_enabled) {
+						|| !DragonShouts.perms_enabled || event.isCancelled()) {
 					if (!DragonShouts.ins.hasUsedWW(p, b)) {
 						s.setLearnedWithEffect(p, b);
 					} else {
@@ -67,7 +67,7 @@ public class DefaultListener implements Listener {
 			select.put(p, b);
 		}
 
-		if (a.name().contains("RIGHT_CLICK") && ItemMetaUtils.hasLore(it)) {
+		if (a.name().contains("RIGHT_CLICK") && it != null && ItemMetaUtils.hasLore(it)) {
 			String pre = "§aBound>";
 			List<String> lo = ItemMetaUtils.getLore(it);
 
@@ -140,7 +140,7 @@ public class DefaultListener implements Listener {
 			if (Shout.kps.contains(m)) {
 				event.setCancelled(true);
 			}
-			if (Shout.aas.get(m) == t) {
+			if (Shout.aas.containsKey(m) && Shout.aas.get(m) == t) {
 				event.setCancelled(true);
 			}
 		}
