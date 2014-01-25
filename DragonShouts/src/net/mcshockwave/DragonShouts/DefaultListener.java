@@ -16,6 +16,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -31,7 +32,7 @@ public class DefaultListener implements Listener {
 
 	HashMap<Player, Block>	select	= new HashMap<>();
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
 		Action a = event.getAction();
@@ -41,8 +42,8 @@ public class DefaultListener implements Listener {
 		if (a == Action.RIGHT_CLICK_BLOCK && DragonShouts.enable_ww && DragonShouts.word_walls.containsKey(b)) {
 			Shout s = DragonShouts.word_walls.get(b);
 			if (!s.hasLearnedShout(p, 3)) {
-				if (DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name())
-						|| !DragonShouts.perms_enabled || event.isCancelled()) {
+				if ((DragonShouts.perms_enabled && p.hasPermission("dragonshouts.shout." + s.name()) || !DragonShouts.perms_enabled)
+						&& !event.isCancelled()) {
 					if (!DragonShouts.ins.hasUsedWW(p, b)) {
 						s.setLearnedWithEffect(p, b);
 					} else {
