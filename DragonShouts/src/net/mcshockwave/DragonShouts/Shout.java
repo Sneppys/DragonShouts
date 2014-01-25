@@ -839,7 +839,7 @@ public enum Shout {
 		}
 	}
 	
-	public void clearShouts(Player p) {
+	public static void clearShouts(Player p) {
 		if (DragonShouts.ins.getLearnedData() != null) {
 			FileConfiguration ld = DragonShouts.ins.getLearnedData();
 
