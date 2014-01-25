@@ -838,6 +838,23 @@ public enum Shout {
 			DragonShouts.ins.saveLearnedData();
 		}
 	}
+	
+	public void clearShouts(Player p) {
+		if (DragonShouts.ins.getLearnedData() != null) {
+			FileConfiguration ld = DragonShouts.ins.getLearnedData();
+
+			List<String> sl = new ArrayList<>();
+			if (ld.getList("learned_data." + p.getName()) != null) {
+				sl = ld.getStringList("learned_data." + p.getName());
+			}
+
+			sl.clear();
+
+			ld.set("learned_data." + p.getName(), sl);
+
+			DragonShouts.ins.saveLearnedData();
+		}
+	}
 
 	public void setLearnedWithEffect(Player p, Block b) {
 		setLearned(p);
