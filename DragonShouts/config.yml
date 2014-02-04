@@ -4,6 +4,7 @@
 # op_only - Require op for shouting
 # op_bypass_cooldown - Ops can bypass the shout cooldown and use it indefinitely [Requires enable_cooldown to be true]
 # permissions_enabled - require dragonshouts.shout.* perm
+# permission_auto_learn - having the permission makes the person automatically able to use the shout [Requires permissions_enabled to be true]
 # enable_cooldown - enable cooldown for shouting
 # require_learn - require non-ops to learn spells from permissions or word walls [Requires op_only to be false]
 # enable_word_walls - enable ops to build word walls
@@ -16,6 +17,7 @@ auto_update: true
 op_only: true
 op_bypass_cooldown: false
 permissions_enabled: false
+permission_auto_learn: true
 enable_cooldown: true
 require_learn: false
 enable_word_walls: true

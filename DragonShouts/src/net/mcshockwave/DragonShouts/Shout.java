@@ -785,6 +785,15 @@ public enum Shout {
 	public boolean hasLearnedShout(Player p, int num) {
 		if (DragonShouts.require_learn) {
 
+			if (DragonShouts.perm_auto && DragonShouts.perms_enabled) {
+				for (int i = num; i > 0; i--) {
+					if (!p.hasPermission("dragonshouts.shout." + name() + "." + i)) {
+						return false;
+					}
+				}
+				return true;
+			}
+
 			if (DragonShouts.ins.getLearnedData() != null) {
 				FileConfiguration ld = DragonShouts.ins.getLearnedData();
 
@@ -838,7 +847,7 @@ public enum Shout {
 			DragonShouts.ins.saveLearnedData();
 		}
 	}
-	
+
 	public static void clearShouts(Player p) {
 		if (DragonShouts.ins.getLearnedData() != null) {
 			FileConfiguration ld = DragonShouts.ins.getLearnedData();
