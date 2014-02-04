@@ -57,7 +57,7 @@ public enum Shout {
 		50,
 		100),
 	Ice_Form(
-		"Liss",
+		"Iiz",
 		"Slen",
 		"Nus",
 		60,
