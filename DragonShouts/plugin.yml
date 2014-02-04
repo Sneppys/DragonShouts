@@ -1,6 +1,6 @@
 name: Dragon Shouts
 main: net.mcshockwave.DragonShouts.DragonShouts
-version: 1.3
+version: 1.4
 author: Blaxcraft
 commands:
    shout:
