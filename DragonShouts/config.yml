@@ -8,6 +8,7 @@
 # enable_cooldown - enable cooldown for shouting
 # require_learn - require non-ops to learn spells from permissions or word walls [Requires op_only to be false]
 # enable_word_walls - enable ops to build word walls
+# word_wall_item - Item for setting word walls
 # broadcast:
 #	enabled - broadcast shout to nearby players
 # 	range - range to broadcast shout to nearby players. set to 0 for infinite range
@@ -21,6 +22,7 @@ permission_auto_learn: true
 enable_cooldown: true
 require_learn: false
 enable_word_walls: true
+word_wall_item: 340
 broadcast:
    enabled: true
    range: 15

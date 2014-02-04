@@ -1,13 +1,5 @@
 package net.mcshockwave.DragonShouts;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Level;
-
 import net.mcshockwave.DragonShouts.Commands.ShoutCommand;
 import net.mcshockwave.DragonShouts.Updater.Updater;
 import net.mcshockwave.DragonShouts.Utils.PacketUtils;
@@ -24,6 +16,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+
 public class DragonShouts extends JavaPlugin {
 
 	public static DragonShouts			ins;
@@ -36,9 +36,10 @@ public class DragonShouts extends JavaPlugin {
 	public static FileConfiguration		shoutConfig		= null;
 	public static File					shoutConfigFile	= null;
 
-	public static boolean				op_only, bypass_opcool, perms_enabled, perm_auto, enable_cooldown, require_learn,
-			enable_ww, broadcast_enabled;
+	public static boolean				op_only, bypass_opcool, perms_enabled, perm_auto, enable_cooldown,
+			require_learn, enable_ww, broadcast_enabled;
 	public static int					broadcast_range;
+	public static Material				ww_item;
 	public static String				broadcast_format;
 
 	public static HashMap<Block, Shout>	word_walls		= new HashMap<>();
@@ -81,6 +82,7 @@ public class DragonShouts extends JavaPlugin {
 		this.setEnabled(true);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void reloadAll() {
 		op_only = getConfig().getBoolean("op_only");
 		perms_enabled = getConfig().getBoolean("permissions_enabled");
@@ -92,6 +94,7 @@ public class DragonShouts extends JavaPlugin {
 		broadcast_range = getConfig().getInt("broadcast.range");
 		broadcast_format = getConfig().getString("broadcast.format");
 		bypass_opcool = getConfig().getBoolean("op_bypass_cooldown");
+		ww_item = Material.getMaterial(getConfig().getInt("word_wall_item"));
 
 		word_walls = getWordWalls();
 

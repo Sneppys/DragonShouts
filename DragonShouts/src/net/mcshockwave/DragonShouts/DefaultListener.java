@@ -57,7 +57,7 @@ public class DefaultListener implements Listener {
 			}
 		}
 
-		if (a == Action.RIGHT_CLICK_BLOCK && p.isOp() && DragonShouts.enable_ww && it.getType() == Material.BOOK
+		if (a == Action.RIGHT_CLICK_BLOCK && p.isOp() && DragonShouts.enable_ww && it.getType() == DragonShouts.ww_item
 				&& b.getType() == Material.BOOKSHELF && !DragonShouts.ins.getWordWalls().containsKey(b)) {
 			int le = Shout.values().length;
 			Inventory i = Bukkit.createInventory(null, (le + (9 - (le % 9))), "Shouts");
