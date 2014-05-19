@@ -1,10 +1,7 @@
 package net.mcshockwave.DragonShouts;
 
-import java.util.HashMap;
-import java.util.List;
-
 import net.mcshockwave.DragonShouts.Utils.ItemMetaUtils;
-import net.minecraft.server.v1_7_R1.EntityComplexPart;
+import net.minecraft.server.v1_7_R2.EntityComplexPart;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,6 +24,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class DefaultListener implements Listener {
 
