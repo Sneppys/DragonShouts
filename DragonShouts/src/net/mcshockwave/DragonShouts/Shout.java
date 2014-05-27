@@ -525,7 +525,7 @@ public enum Shout {
 		if (this == Elemental_Fury) {
 			p.getWorld().playSound(p.getLocation(), Sound.WITHER_SPAWN, 1, 2);
 			p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (int) (num * 100 * power), num - 1));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (num * 100 * power), num - 1));
+			p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, (int) (num * 100 * power), num - 2));
 		}
 
 		if (this == Soul_Tear) {
