@@ -1,7 +1,7 @@
 package net.mcshockwave.DragonShouts;
 
 import net.mcshockwave.DragonShouts.Utils.ItemMetaUtils;
-import net.minecraft.server.v1_7_R2.EntityComplexPart;
+import net.minecraft.server.v1_7_R4.EntityComplexPart;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
