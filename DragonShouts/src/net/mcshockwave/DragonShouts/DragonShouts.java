@@ -1,7 +1,6 @@
 package net.mcshockwave.DragonShouts;
 
 import net.mcshockwave.DragonShouts.Commands.ShoutCommand;
-import net.mcshockwave.DragonShouts.Updater.Updater;
 import net.mcshockwave.DragonShouts.Utils.PacketUtils;
 import net.mcshockwave.DragonShouts.Utils.PacketUtils.ParticleEffect;
 
@@ -52,10 +51,6 @@ public class DragonShouts extends JavaPlugin {
 		getCommand("shout").setExecutor(new ShoutCommand());
 
 		Bukkit.getPluginManager().registerEvents(new DefaultListener(), this);
-
-		if (getConfig().getBoolean("auto_update")) {
-			new Updater(this, 71144, getFile(), Updater.UpdateType.DEFAULT, true);
-		}
 
 		ins = this;
 		prefix = "§a[" + getDescription().getName() + "] §7";

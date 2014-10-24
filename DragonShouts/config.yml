@@ -1,6 +1,5 @@
 # Configuration for Dragon Shouts by Blaxcraft
 #
-# auto_update - Allow Dragon Shouts to update itself
 # op_only - Require op for shouting
 # op_bypass_cooldown - Ops can bypass the shout cooldown and use it indefinitely [Requires enable_cooldown to be true]
 # permissions_enabled - require dragonshouts.shout.* perm
@@ -14,7 +13,6 @@
 # 	range - range to broadcast shout to nearby players. set to 0 for infinite range
 # 	format - format for broadcast : %p = player, %w = words, %n for shout name, Use '&' for color codes
 
-auto_update: true
 op_only: true
 op_bypass_cooldown: false
 permissions_enabled: false
